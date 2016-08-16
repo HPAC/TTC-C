@@ -55,6 +55,14 @@ the example of perm=2,1,0 for tensors of size 100x200x300:
     param.perm = perm;
     param.size = size;
 
+    // Set TTC options (THIS IS OPTIONAL)
+    int maxImplemenations = 100;
+    ttc_set_opt( ttc_handle, TTC_OPT_MAX_IMPL, (void*)&maxImplemenations, 1 );
+    int numThreads = 24;
+    ttc_set_opt( ttc_handle, TTC_OPT_NUM_THREADS, (void*)&numThreads, 1 );
+    char affinity[] = "compact,1";
+    ttc_set_opt( ttc_handle, TTC_OPT_AFFINITY, (void*)affinity, strlen(affinity) );
+
     // Allocating memory for tensors
     void *A = (void *)malloc(sizeof(float) * 100*200*300);
     void *B = (void *)malloc(sizeof(float) * 100*200*300);

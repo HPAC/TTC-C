@@ -593,7 +593,7 @@ ttc_release(
  * @param[in]       type    The target option to be set.
  * @param[in]       value   A pointer pointing to the option's value.
  * @param[in]       length  If the value is an array, this parameter will be
- * used to describe the length of it. If the the value is not an array, it could
+ * used to describe the length of it. If the value is not an array, it could
  * be any values.
  *
  * @return The status, if the function parameter are not correct (e.g. `value`
