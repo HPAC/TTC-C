@@ -555,9 +555,15 @@ struct ttc_handler {
  * @sa struct ttc_handler, typedef struct ttc_handler ttc_handler_s
  *
  */
+#ifdef __cplusplus 
+extern "C" {
+#endif
 ttc_handler_s *
 ttc_init(
         );
+#ifdef __cplusplus
+}
+#endif
 
 
 /**
@@ -568,10 +574,16 @@ ttc_init(
  * @sa struct ttc_handler, typedef struct ttc_handler ttc_handler_s
  *
  */
+#ifdef __cplusplus 
+extern "C" {
+#endif
 void
 ttc_release(
         ttc_handler_s   *handler
         );
+#ifdef __cplusplus
+}
+#endif
 
 
 /**
@@ -593,6 +605,9 @@ ttc_release(
  * enum ttc_opt_type, typedef enum ttc_opt_type ttc_opt_type_e
  *
  */
+#ifdef __cplusplus 
+extern "C" {
+#endif
 int32_t
 ttc_set_opt(
         ttc_handler_s   *handler,
@@ -600,6 +615,9 @@ ttc_set_opt(
         const void      *value,
         uint32_t        length
         );
+#ifdef __cplusplus
+}
+#endif
 
 
 /**
@@ -629,6 +647,9 @@ ttc_set_opt(
  * struct ttc_param, typedef struct ttc_param_s
  *
  */
+#ifdef __cplusplus 
+extern "C" {
+#endif
 int32_t
 ttc_transpose(
         ttc_handler_s       *handler,
@@ -636,6 +657,9 @@ ttc_transpose(
         const void          *input,
         void                *result
         );
+#ifdef __cplusplus
+}
+#endif
 
 
 

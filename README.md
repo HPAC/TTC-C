@@ -42,13 +42,16 @@ Then, execute `make` to build the library, and `make doc` to build the document.
 Here is a short (incomplete) example which illustrates the usage of this API on
 the example of perm=2,1,0 for tensors of size 100x200x300:
 
+    // include header
+    #include <ttc_c.h>
+
     // Create handler
     ttc_handler_s *handler = ttc_init();
 
     // Create transpose parameter
-    ttc_param_s param = { .alpha.s = 1.0, .beta.s = 1.0, ... , .dim = 3};
-    uint32_t perm[3] = { 2, 1, 0};
-    uint32_t size[3] = { 100, 200, 300};
+    ttc_param_s param = { .alpha.s = 1.0, .beta.s = 1.0, .lda = NULL, .ldb = NULL, .perm = NULL, .size = NULL, .loop_perm = NULL, .dim = 4};
+    uint32_t perm[] = { 2, 1, 0};
+    uint32_t size[] = { 100, 200, 300};
     param.perm = perm;
     param.size = size;
 
