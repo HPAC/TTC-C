@@ -10,7 +10,7 @@
 #include <complex.h>
 
 #include "test-util.h"
-#include "tensor_tc.h"
+#include "ttc_c.h"
 #include "tensor_util.h"
 
 #define TENSOR_DIM      3

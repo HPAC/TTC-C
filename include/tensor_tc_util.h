@@ -14,7 +14,7 @@ extern "C" {
 
 #include <stdint.h>
 
-#include "tensor_tc.h"
+#include "ttc_c.h"
 
 
 

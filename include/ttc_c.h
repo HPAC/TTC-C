@@ -1,5 +1,5 @@
 /**
- * @file tensor_tc.h
+ * @file ttc_c.h
  * @brief The C APIs for TTC
  *
  */

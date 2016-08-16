@@ -1,4 +1,4 @@
-#include "tensor_tc.h"
+#include "ttc_c.h"
 
 #include <stdlib.h>
 #include <stdint.h>

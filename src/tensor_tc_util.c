@@ -12,7 +12,7 @@
 #include <sys/wait.h>
 
 #include "tensor_util.h"
-#include "tensor_tc.h"
+#include "ttc_c.h"
 
 
 
