@@ -74,6 +74,8 @@
     memcpy(argv[arg_idx], str val, arg_len)
 
 
+#define INCLUDE_STR "include"
+
 
 /* ======== Internal function ======== */
 
@@ -236,13 +238,13 @@ ttc_create_plan(
         || TTC_TYPE_SD == options->datatype
         || TTC_TYPE_CZ == options->datatype
        ) {
-        DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::alpha"
-                "with single precision.");
+        DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::alpha with single "
+                "precision.");
         new_plan->param.alpha.s = param->alpha.s <= 0 ? 1.0 : param->alpha.s;
     }
     else {
-        DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::alpha"
-                "with double precision.");
+        DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::alpha with double "
+                "precision.");
         new_plan->param.alpha.d = param->alpha.d <= 0 ? 1.0 : param->alpha.d;
     }
 
@@ -904,10 +906,8 @@ ttc_locate_header(
 
     // Pointer for seeking the target.
     char *store_ptr = seek_buf;
-    // String of the target indicator.
-    const char *include_str = "include";
     // Target indicator's length.
-    int32_t include_size = sizeof(include_str) - 1;
+    int32_t include_size = sizeof(INCLUDE_STR) - 1;
 
     // Locating
     while (read(pipe_fileno, seek_buf, 1) > 0) {
@@ -916,7 +916,7 @@ ttc_locate_header(
             // If find the # sign which is the head of target.
             // Read target indicator's length and check if it's indicator.
             read(pipe_fileno, seek_buf, include_size);
-            if (0 == strncmp(seek_buf, include_str, include_size)) {
+            if (0 == strncmp(seek_buf, INCLUDE_STR, include_size)) {
                 DEBUG_INFO_OUTPUT("include found.");
                 // If the indicator is found, begin to record target.
                 bool record_flag = false;

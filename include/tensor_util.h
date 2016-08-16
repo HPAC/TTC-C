@@ -45,6 +45,7 @@ extern "C" {
 #include <string.h>
 
 
+extern char func_namespace[];
 
 /**
  * @brief A macro that setting the namespace of the debug macro.

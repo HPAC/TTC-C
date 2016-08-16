@@ -412,7 +412,7 @@ struct ttc_plan {
 
     void        *dlhandler;
 
-    void
+    int32_t
     (*fn)(
         const void      *input,
         void            *result,
@@ -423,7 +423,7 @@ struct ttc_plan {
         );
     ///< A function pointer pointing to the transposition algorithms.
 
-    void
+    int32_t
     (*fn_cuda)(
         const void      *input,
         void            *result,
@@ -611,10 +611,14 @@ ttc_set_opt(
  * save it in the handler.
  *
  * @param[in,out]   handler A pointer pointing to a TTC handler.
- * @param[in]       param   A parameter describing the transposition.
- * @param[in]       input   A pointer pointing to the input tensor.
+ * @param[in]       param   A parameter describing the transposition. Stored in
+ * host memory when using CUDA.
+ *
+ * @param[in]       input   A pointer pointing to the input tensor. Stored in
+ * host memory when using CUDA.
+ *
  * @param[out]      result  A pointer pointing to a piece of memory for storing
- * result.
+ * result. Stored in the host memory when using CUDA.
  *
  * @return The status, if the function parameter are not correct (e.g. `value`
  * is null), then it will return -1. If some internal error happens (e.g. cannot
