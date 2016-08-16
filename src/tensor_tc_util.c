@@ -329,9 +329,13 @@ ttc_create_plan(
 
         char **debug_ptr = argv;
         DEBUG_INFO_OUTPUT("TTC command line:");
+
+        char cmd_buf[TTC_GEN_BUF_SIZE];
+        cmd_buf[0] = '\0';
         for (; NULL != *debug_ptr; ++debug_ptr) {
-            DEBUG_INFO_OUTPUT(*debug_ptr);
+            sprintf(cmd_buf, "%s%s ", cmd_buf,*debug_ptr);
         }
+        DEBUG_INFO_OUTPUT(cmd_buf);
 
 
         // Redirect standard output
