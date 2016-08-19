@@ -85,13 +85,13 @@ extern "C" {
 
 
 #define TTC_GXX_CMPL            "g++ -c -O3 -w -fPIC -fopenmp -march=native "
-#define TTC_GXX_LINK            "g++ -shared -O3 -fopenmp "
+#define TTC_GXX_LINK            "g++ -shared -fopenmp "
 
-#define TTC_ICPC_CMPL           "icpc -c -O3 -w -fPIC -fopenmp -march=native "
-#define TTC_ICPC_LINK           "icpc -shared -O3 -fopenmp "
+#define TTC_ICPC_CMPL           "icpc -c -O3 -w -fPIC -xhost -openmp "
+#define TTC_ICPC_LINK           "icpc -shared -openmp "
 
 #define TTC_NVCC_CMPL       "nvcc -rdc=true -c -O3 -Xcompiler '-fPIC' -lgomp "
-#define TTC_NVCC_LINK           "nvcc -rdc=true -shared -O3 -lgomp "
+#define TTC_NVCC_LINK           "nvcc -rdc=true -shared -lgomp "
 
 #define TTC_ARCH_AVX_CMPL       TTC_ICPC_CMPL
 #define TTC_ARCH_AVX_LINK       TTC_ICPC_LINK

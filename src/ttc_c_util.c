@@ -1,4 +1,4 @@
-#include "tensor_tc_util.h"
+#include "ttc_c_util.h"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -318,31 +318,27 @@ ttc_create_plan(
         DEBUG_INFO_OUTPUT("Child process: Child starts.");
 
         // Build arguments
-        DEBUG_INFO_OUTPUT("Child process: "
-                "Generating command line arguments.");
+        DEBUG_INFO_OUTPUT("Child process: Generating command line arguments.");
         char **argv = ttc_gen_arg(options, param);
         if (NULL == argv) {
-            DEBUG_ERR_OUTPUT("Child process: "
-                    "Cannot parse arguments.");
+            DEBUG_ERR_OUTPUT("Child process: Cannot parse arguments.");
             exit(-1);
         }
 
+#ifdef TENSOR_DEBUG
         char **debug_ptr = argv;
-        DEBUG_INFO_OUTPUT("TTC command line:");
-
         char cmd_buf[TTC_GEN_BUF_SIZE];
         cmd_buf[0] = '\0';
-        for (; NULL != *debug_ptr; ++debug_ptr) {
-            sprintf(cmd_buf, "%s%s ", cmd_buf,*debug_ptr);
-        }
+        for (; NULL != *debug_ptr; ++debug_ptr)
+            sprintf(cmd_buf, "%s%s ", cmd_buf, *debug_ptr);
         DEBUG_INFO_OUTPUT(cmd_buf);
+#endif
 
 
         // Redirect standard output
         close(ttc_pipe[TTC_PIPE_RD]);
         if (-1 == dup2(ttc_pipe[TTC_PIPE_WR], STDOUT_FILENO)) {
-            DEBUG_ERR_OUTPUT("Child process:"
-                    "Cannot redirect IO.");
+            DEBUG_ERR_OUTPUT("Child process: Cannot redirect IO.");
             exit(-1);
         }
 
