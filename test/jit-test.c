@@ -1,7 +1,7 @@
 /**
  * @file jit-test.c
  *
- * @brief Test example for TTC-TCC C API.
+ * @brief Test example for TTC C API.
  *
  */
 
@@ -11,7 +11,6 @@
 
 #include "test-util.h"
 #include "ttc_c.h"
-#include "tensor_util.h"
 
 #define TENSOR_DIM      3
 #define TENSOR_SIZE_0   256
@@ -37,7 +36,8 @@
  *
  * @return The status, 0 if succeed, non-zero if failed.
  */
-int32_t reuse_test(
+int32_t
+reuse_test(
         );
 
 
@@ -48,7 +48,8 @@ int32_t reuse_test(
  *
  * @return The status, 0 if succeed, non-zero if failed.
  */
-int32_t datatype_test(
+int32_t
+datatype_test(
         ttc_datatype_e type
         );
 
@@ -61,7 +62,8 @@ int32_t datatype_test(
  *
  * @return The status, 0 if succeed, non-zero if failed.
  */
-int32_t arch_compiler_test(
+int32_t
+arch_compiler_test(
         ttc_arch_e arch,
         ttc_compiler_e compiler
         );
@@ -77,7 +79,8 @@ int32_t arch_compiler_test(
  *
  * @return The status, 0 if succeed, non-zero if failed.
  */
-int32_t cuda_test(
+int32_t
+cuda_test(
         ttc_datatype_e type,
         ttc_thread_blk_e blk,
         int32_t *lda,
@@ -94,7 +97,8 @@ int32_t cuda_test(
  *
  * @return The status, 0 if succeed, non-zero if failed.
  */
-int32_t no_beta_test(
+int32_t
+no_beta_test(
         ttc_datatype_e type,
         ttc_arch_e arch,
         ttc_compiler_e compiler
@@ -102,7 +106,8 @@ int32_t no_beta_test(
 
 
 
-int32_t main() {
+int32_t
+main() {
     uint32_t total_num = 0, error_num = 0;
 
 
@@ -366,7 +371,8 @@ int32_t main() {
 
 
 
-int32_t reuse_test(
+int32_t
+reuse_test(
         ) {
     // Create handler
     ttc_handler_s *handler = ttc_init();
@@ -425,7 +431,8 @@ int32_t reuse_test(
 }
 
 
-int32_t datatype_test(
+int32_t
+datatype_test(
         ttc_datatype_e type
         ) {
     ttc_handler_s *handler = ttc_init();
@@ -515,8 +522,9 @@ int32_t datatype_test(
     }
 
     int32_t ret = ttc_transpose(handler, &param, input_tensor, result_tensor);
-    if (0 != ret)
+    if (0 != ret) {
         TEST_ERR_OUTPUT("Transpose failed.");
+    }
 
     free(input_tensor);
     free(result_tensor);
@@ -525,7 +533,8 @@ int32_t datatype_test(
 }
 
 
-int32_t arch_compiler_test(
+int32_t
+arch_compiler_test(
         ttc_arch_e arch,
         ttc_compiler_e compiler
         ) {
@@ -579,8 +588,9 @@ int32_t arch_compiler_test(
     }
 
     int32_t ret = ttc_transpose(handler, &param, input_tensor, result_tensor);
-    if (0 != ret)
+    if (0 != ret) {
         TEST_ERR_OUTPUT("Transpose failed.");
+    }
 
     free(input_tensor);
     free(result_tensor);
@@ -589,7 +599,8 @@ int32_t arch_compiler_test(
 }
 
 
-int32_t cuda_test(
+int32_t
+cuda_test(
         ttc_datatype_e type,
         ttc_thread_blk_e blk,
         int32_t *lda,
@@ -693,8 +704,9 @@ int32_t cuda_test(
     }
 
     int32_t ret = ttc_transpose(handler, &param, input_tensor, result_tensor);
-    if (0 != ret)
+    if (0 != ret) {
         TEST_ERR_OUTPUT("Transpose failed.");
+    }
 
     free(input_tensor);
     free(result_tensor);
@@ -703,7 +715,8 @@ int32_t cuda_test(
 }
 
 
-int32_t no_beta_test(
+int32_t
+no_beta_test(
         ttc_datatype_e type,
         ttc_arch_e arch,
         ttc_compiler_e compiler
@@ -760,8 +773,9 @@ int32_t no_beta_test(
     }
 
     int32_t ret = ttc_transpose(handler, &param, input_tensor, result_tensor);
-    if (0 != ret)
+    if (0 != ret) {
         TEST_ERR_OUTPUT("Transpose failed.");
+    }
 
     free(input_tensor);
     free(result_tensor);
