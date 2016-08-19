@@ -9,11 +9,6 @@
 #include <stdint.h>
 
 
-#ifdef __CPLUSPLUS
-extern "C" {
-#endif
-
-
 
 /* ======== Typedef ======== */
 
@@ -546,6 +541,10 @@ struct ttc_handler {
 
 /* ======== Function declaration ======== */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief A function for initialization and generating a TTC handler.
  *
@@ -555,15 +554,9 @@ struct ttc_handler {
  * @sa struct ttc_handler, typedef struct ttc_handler ttc_handler_s
  *
  */
-#ifdef __cplusplus 
-extern "C" {
-#endif
 ttc_handler_s *
 ttc_init(
         );
-#ifdef __cplusplus
-}
-#endif
 
 
 /**
@@ -574,16 +567,25 @@ ttc_init(
  * @sa struct ttc_handler, typedef struct ttc_handler ttc_handler_s
  *
  */
-#ifdef __cplusplus 
-extern "C" {
-#endif
 void
 ttc_release(
         ttc_handler_s   *handler
         );
-#ifdef __cplusplus
-}
-#endif
+
+
+/**
+ * @brief A function for generating a default ttc_param_s object.
+ *
+ * @details It will generate a ttc_param_s object, whose value is:
+ * { .alpha.s = 1.0, .beta.s = 0.0, .lda = NULL, .ldb = NULL, .perm = NULL,
+ *  .size = NULL, .loop_perm = NULL, .dim = 0 }
+ *
+ * @sa struct ttc_param, typedef struct ttc_param ttc_param_s
+ *
+ */
+ttc_param_s
+ttc_default_param(
+        );
 
 
 /**
@@ -605,9 +607,6 @@ ttc_release(
  * enum ttc_opt_type, typedef enum ttc_opt_type ttc_opt_type_e
  *
  */
-#ifdef __cplusplus 
-extern "C" {
-#endif
 int32_t
 ttc_set_opt(
         ttc_handler_s   *handler,
@@ -615,9 +614,6 @@ ttc_set_opt(
         const void      *value,
         uint32_t        length
         );
-#ifdef __cplusplus
-}
-#endif
 
 
 /**
@@ -647,9 +643,6 @@ ttc_set_opt(
  * struct ttc_param, typedef struct ttc_param_s
  *
  */
-#ifdef __cplusplus 
-extern "C" {
-#endif
 int32_t
 ttc_transpose(
         ttc_handler_s       *handler,
@@ -661,9 +654,4 @@ ttc_transpose(
 }
 #endif
 
-
-
-#ifdef __CPLUSPLUS
-}
-#endif
 
