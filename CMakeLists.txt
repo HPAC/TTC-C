@@ -5,7 +5,7 @@
 #      $ cmake <PATH_TO_TTC_TCC_C>
 #
 # ----------------------------------------------------------------------------
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.4)
 project (TTC_C)
 
 
@@ -17,6 +17,7 @@ find_package(Doxygen)
 option(BUILD_TEST "Generate executable test program.")
 option(BUILD_DOC "Create the HTML based API documentation (requires doxygen)."
     ${DOXYGEN_FOUND})
+
 # Variables
 set(BUILD_TYPE "RELEASE" CACHE STRING "Build type, either DEBUG or RELEASE.")
 
@@ -43,6 +44,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${TTC_CC_FLAGS}")
 # Add include files' directory
 include_directories(include)
 # Add source directory
+add_subdirectory(include)
 add_subdirectory(src)
 
 # ----------------------------------------------------------------------------
@@ -55,3 +57,4 @@ endif ()
 if (BUILD_DOC)
     add_subdirectory(doc)
 endif()
+
