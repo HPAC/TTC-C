@@ -84,29 +84,32 @@ extern "C" {
 #define TTC_FUNC_SYMBOL         "transpose"
 
 
-#define TTC_GXX_CMPL            "g++ -c -O3 -w -fPIC -fopenmp -march=native "
-#define TTC_GXX_LINK            "g++ -shared -fopenmp "
+#define TTC_GXX_CMPL            "g++ -c -O2 -w -fPIC "
+#define TTC_GXX_LINK            "g++ -shared "
 
-#define TTC_ICPC_CMPL           "icpc -c -O3 -w -fPIC -xhost -openmp "
-#define TTC_ICPC_LINK           "icpc -shared -openmp "
+#define TTC_ICPC_CMPL           "icpc -c -O2 -w -fPIC "
+#define TTC_ICPC_LINK           "icpc -shared "
 
-#define TTC_NVCC_CMPL       "nvcc -rdc=true -c -O3 -Xcompiler '-fPIC' -lgomp "
-#define TTC_NVCC_LINK           "nvcc -rdc=true -shared -lgomp "
+#define TTC_NVCC_CMPL           "nvcc -c -O2 -rdc=true "
+#define TTC_NVCC_LINK           "nvcc -rdc=true -shared "
 
-#define TTC_ARCH_AVX_CMPL       TTC_ICPC_CMPL
-#define TTC_ARCH_AVX_LINK       TTC_ICPC_LINK
+#define TTC_ARCH_AVX_GXX_CMPL   TTC_GXX_CMPL "-fopenmp -march=native "
+#define TTC_ARCH_AVX_GXX_LINK   TTC_GXX_LINK "-fopenmp "
 
-#define TTC_ARCH_DEF_CMPL       TTC_ARCH_AVX_CMPL
-#define TTC_ARCH_DEF_LINK       TTC_ARCH_AVX_LINK
+#define TTC_ARCH_AVX_ICPC_CMPL  TTC_ICPC_CMPL "-xhost -openmp "
+#define TTC_ARCH_AVX_ICPC_LINK  TTC_ICPC_LINK "-openmp "
 
-#define TTC_ARCH_CUDA_CMPL      TTC_NVCC_CMPL
-#define TTC_ARCH_CUDA_LINK      TTC_NVCC_LINK
+#define TTC_ARCH_CUDA_CMPL      TTC_NVCC_CMPL "-Xcompiler '-fPIC' -lgomp "
+#define TTC_ARCH_CUDA_LINK      TTC_NVCC_LINK "-lgomp "
 
-#define TTC_ARCH_KNC_CMPL
-#define TTC_ARCH_KNC_LINK
+#define TTC_ARCH_KNC_CMPL       TTC_ICPC_CMPL "-mmic -openmp "
+#define TTC_ARCH_KNC_LINK       TTC_ICPC_LINK "-openmp "
 
-#define TTC_ARCH_AVX512_CMLP
-#define TTC_ARCH_AVX512_LINK
+#define TTC_ARCH_AVX512_CMPL    TTC_ICPC_CMPL "-xMIC-AVX512 -openmp "
+#define TTC_ARCH_AVX512_LINK    TTC_ICPC_LINK "-openmp "
+
+#define TTC_ARCH_DEF_CMPL       TTC_ARCH_AVX_ICPC_CMPL
+#define TTC_ARCH_DEF_LINK       TTC_ARCH_AVX_ICPC_LINK
 
 
 
