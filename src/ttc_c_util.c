@@ -1,4 +1,4 @@
-#include "tensor_tc_util.h"
+#include "ttc_c_util.h"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -318,31 +318,27 @@ ttc_create_plan(
         DEBUG_INFO_OUTPUT("Child process: Child starts.");
 
         // Build arguments
-        DEBUG_INFO_OUTPUT("Child process: "
-                "Generating command line arguments.");
+        DEBUG_INFO_OUTPUT("Child process: Generating command line arguments.");
         char **argv = ttc_gen_arg(options, param);
         if (NULL == argv) {
-            DEBUG_ERR_OUTPUT("Child process: "
-                    "Cannot parse arguments.");
+            DEBUG_ERR_OUTPUT("Child process: Cannot parse arguments.");
             exit(-1);
         }
 
+#ifdef TENSOR_DEBUG
         char **debug_ptr = argv;
-        DEBUG_INFO_OUTPUT("TTC command line:");
-
         char cmd_buf[TTC_GEN_BUF_SIZE];
         cmd_buf[0] = '\0';
-        for (; NULL != *debug_ptr; ++debug_ptr) {
-            sprintf(cmd_buf, "%s%s ", cmd_buf,*debug_ptr);
-        }
+        for (; NULL != *debug_ptr; ++debug_ptr)
+            sprintf(cmd_buf, "%s%s ", cmd_buf, *debug_ptr);
         DEBUG_INFO_OUTPUT(cmd_buf);
+#endif
 
 
         // Redirect standard output
         close(ttc_pipe[TTC_PIPE_RD]);
         if (-1 == dup2(ttc_pipe[TTC_PIPE_WR], STDOUT_FILENO)) {
-            DEBUG_ERR_OUTPUT("Child process:"
-                    "Cannot redirect IO.");
+            DEBUG_ERR_OUTPUT("Child process: Cannot redirect IO.");
             exit(-1);
         }
 
@@ -695,9 +691,10 @@ ttc_gen_arg(
 
     switch (options->arch) {
     case TTC_ARCH_DEFAULT:
-        DEBUG_INFO_OUTPUT("Using default architecture.");
+        DEBUG_INFO_OUTPUT("Setting default architecture.");
         break;
     case TTC_ARCH_AVX:
+        DEBUG_INFO_OUTPUT("Setting default architecture.");
         TTC_SET_ARG_ENUM(TTC_ARG_ARCH, TTC_ARG_ARCH_AVX);
         ++arg_idx;
         break;
@@ -709,16 +706,12 @@ ttc_gen_arg(
         ++arg_idx;
         break;
     case TTC_ARCH_AVX512:
-        DEBUG_ERR_OUTPUT("AVX512 arch is not supported.");
-        ttc_release_arg(argv);
-        return NULL;
+        DEBUG_INFO_OUTPUT("Setting default architecture.");
         TTC_SET_ARG_ENUM(TTC_ARG_ARCH, TTC_ARG_ARCH_AVX512);
         ++arg_idx;
         break;
     case TTC_ARCH_KNC:
-        DEBUG_ERR_OUTPUT("KNC arch is not supported.");
-        ttc_release_arg(argv);
-        return NULL;
+        DEBUG_INFO_OUTPUT("Setting default architecture.");
         TTC_SET_ARG_ENUM(TTC_ARG_ARCH, TTC_ARG_ARCH_KNC);
         ++arg_idx;
         break;
@@ -1223,11 +1216,27 @@ ttc_gen_lib(
     char cmd_buf[TTC_GEN_BUF_SIZE];
     cmd_buf[0] = '\0';
 
-    if (TTC_ARCH_DEFAULT == options->arch || TTC_ARCH_AVX == options->arch) {
+    if (TTC_ARCH_DEFAULT == options->arch) {
+        DEBUG_INFO_OUTPUT("Default architecture.");
+
+        // Compiling
+        sprintf(cmd_buf, "%s -o %s.o %s.%s", TTC_ARCH_DEF_CMPL,
+                target_prefix, target_prefix, target_suffix);
+        DEBUG_INFO_OUTPUT(cmd_buf);
+        system(cmd_buf);
+
+        // Linking
+        sprintf(cmd_buf, "%s -o lib%s.so %s.o", TTC_ARCH_DEF_LINK,
+                target_prefix, target_prefix);
+        DEBUG_INFO_OUTPUT(cmd_buf);
+        system(cmd_buf);
+    }
+    else if (TTC_ARCH_AVX == options->arch) {
+        DEBUG_INFO_OUTPUT("AVX architecture.");
         const char *cmpl = TTC_CMP_GXX == options->compiler ?
-            TTC_GXX_CMPL : TTC_ARCH_DEF_CMPL;
+            TTC_ARCH_AVX_GXX_CMPL : TTC_ARCH_AVX_ICPC_CMPL;
         const char *link = TTC_CMP_GXX == options->compiler ?
-            TTC_GXX_LINK : TTC_ARCH_DEF_LINK;
+            TTC_ARCH_AVX_GXX_LINK : TTC_ARCH_AVX_ICPC_LINK;
 
         // Compiling
         sprintf(cmd_buf, "%s -o %s.o %s.%s", cmpl,
@@ -1237,6 +1246,36 @@ ttc_gen_lib(
 
         // Linking
         sprintf(cmd_buf, "%s -o lib%s.so %s.o", link,
+                target_prefix, target_prefix);
+        DEBUG_INFO_OUTPUT(cmd_buf);
+        system(cmd_buf);
+    }
+    else if (TTC_ARCH_AVX512 == options->arch) {
+        DEBUG_INFO_OUTPUT("AVX512 architecture.");
+
+        // Compiling
+        sprintf(cmd_buf, "%s -o %s.o %s.%s", TTC_ARCH_AVX512_CMPL,
+                target_prefix, target_prefix, target_suffix);
+        DEBUG_INFO_OUTPUT(cmd_buf);
+        system(cmd_buf);
+
+        // Linking
+        sprintf(cmd_buf, "%s -o lib%s.so %s.o", TTC_ARCH_AVX512_LINK,
+                target_prefix, target_prefix);
+        DEBUG_INFO_OUTPUT(cmd_buf);
+        system(cmd_buf);
+    }
+    else if (TTC_ARCH_KNC == options->arch) {
+        DEBUG_INFO_OUTPUT("KNC architecture.");
+
+        // Compiling
+        sprintf(cmd_buf, "%s -o %s.o %s.%s", TTC_ARCH_KNC_CMPL,
+                target_prefix, target_prefix, target_suffix);
+        DEBUG_INFO_OUTPUT(cmd_buf);
+        system(cmd_buf);
+
+        // Linking
+        sprintf(cmd_buf, "%s -o lib%s.so %s.o", TTC_ARCH_KNC_LINK,
                 target_prefix, target_prefix);
         DEBUG_INFO_OUTPUT(cmd_buf);
         system(cmd_buf);

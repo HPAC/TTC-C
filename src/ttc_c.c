@@ -10,7 +10,7 @@
 #include <unistd.h>
 
 #include "tensor_util.h"
-#include "tensor_tc_util.h"
+#include "ttc_c_util.h"
 
 
 
@@ -77,6 +77,23 @@ ttc_release(
     // Release handler
     DEBUG_INFO_OUTPUT("Releasing handler object.");
     free(handler);
+}
+
+
+ttc_param_s
+ttc_default_param(
+        ) {
+    ttc_param_s def_obj = {
+        .alpha.s    = 1.0,
+        .beta.s     = 0.0,
+        .lda        = NULL,
+        .ldb        = NULL,
+        .perm       = NULL,
+        .size       = NULL,
+        .loop_perm  = NULL,
+        .dim        = 0
+    };
+    return def_obj;
 }
 
 
