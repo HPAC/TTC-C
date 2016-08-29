@@ -118,6 +118,7 @@ main() {
     }
     else {
         TEST_SUCC_OUTPUT("TYPE_CZ + AVX512 + Default Compiler succeed.");
+    }
 
     TEST_INFO_OUTPUT("TYPE_ZC + AVX512 + Default Compiler");
     ++total_num;
@@ -127,7 +128,6 @@ main() {
     }
     else {
         TEST_SUCC_OUTPUT("TYPE_ZC + AVX512 + Default Compiler succeed.");
-    }
     }
 
     printf("%sTest finished. TOTAL: %d, SUCCEED: %d, FAILED: %d%s\n",

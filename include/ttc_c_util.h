@@ -1,5 +1,5 @@
 /**
- * @file tensor_tc_util.h
+ * @file ttc_c_util.h
  * @brief The utilities for TTC C APIs' internal usage.
  *
  */
@@ -7,14 +7,14 @@
 
 
 
-#ifdef __CPLUSPLUS
-extern "C" {
-#endif
-
-
 #include <stdint.h>
 
 #include "ttc_c.h"
+
+
+#ifdef __CPLUSPLUS
+extern "C" {
+#endif
 
 
 
@@ -96,17 +96,17 @@ extern "C" {
 #define TTC_ARCH_AVX_GXX_CMPL   TTC_GXX_CMPL "-fopenmp -march=native "
 #define TTC_ARCH_AVX_GXX_LINK   TTC_GXX_LINK "-fopenmp "
 
-#define TTC_ARCH_AVX_ICPC_CMPL  TTC_ICPC_CMPL "-xhost -openmp "
-#define TTC_ARCH_AVX_ICPC_LINK  TTC_ICPC_LINK "-openmp "
+#define TTC_ARCH_AVX_ICPC_CMPL  TTC_ICPC_CMPL "-xhost -qopenmp "
+#define TTC_ARCH_AVX_ICPC_LINK  TTC_ICPC_LINK "-qopenmp "
 
 #define TTC_ARCH_CUDA_CMPL      TTC_NVCC_CMPL "-Xcompiler '-fPIC' -lgomp "
 #define TTC_ARCH_CUDA_LINK      TTC_NVCC_LINK "-lgomp "
 
-#define TTC_ARCH_KNC_CMPL       TTC_ICPC_CMPL "-mmic -openmp "
-#define TTC_ARCH_KNC_LINK       TTC_ICPC_LINK "-openmp "
+#define TTC_ARCH_KNC_CMPL       TTC_ICPC_CMPL "-mmic -qopenmp "
+#define TTC_ARCH_KNC_LINK       TTC_ICPC_LINK "-qopenmp "
 
-#define TTC_ARCH_AVX512_CMPL    TTC_ICPC_CMPL "-xMIC-AVX512 -openmp "
-#define TTC_ARCH_AVX512_LINK    TTC_ICPC_LINK "-openmp "
+#define TTC_ARCH_AVX512_CMPL    TTC_ICPC_CMPL "-xMIC-AVX512 -qopenmp "
+#define TTC_ARCH_AVX512_LINK    TTC_ICPC_LINK "-qopenmp "
 
 #define TTC_ARCH_DEF_CMPL       TTC_ARCH_AVX_ICPC_CMPL
 #define TTC_ARCH_DEF_LINK       TTC_ARCH_AVX_ICPC_LINK
