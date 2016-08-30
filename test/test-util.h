@@ -10,7 +10,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -82,8 +81,8 @@ datatype_test(
  */
 int32_t
 arch_compiler_test(
-        ttc_arch_e arch,
-        ttc_compiler_e compiler
+        ttc_arch_e      arch,
+        ttc_compiler_e  compiler
         );
 
 
@@ -99,10 +98,10 @@ arch_compiler_test(
  */
 int32_t
 cuda_test(
-        ttc_datatype_e type,
-        ttc_thread_blk_e blk,
-        int32_t *lda,
-        int32_t *ldb
+        ttc_datatype_e      type,
+        ttc_thread_blk_e    blk,
+        int32_t             *lda,
+        int32_t             *ldb
         );
 
 
@@ -117,9 +116,9 @@ cuda_test(
  */
 int32_t
 no_beta_test(
-        ttc_datatype_e type,
-        ttc_arch_e arch,
-        ttc_compiler_e compiler
+        ttc_datatype_e  type,
+        ttc_arch_e      arch,
+        ttc_compiler_e  compiler
         );
 
 
@@ -133,7 +132,12 @@ no_transpose(
         );
 
 
+#ifdef __CPLUSPLUS
+}
+#endif
 
+
+// Test macros
 #define TEST_INFO_OUTPUT(str) fprintf(stdout, "[TEST-INFO] %s: %s\n", \
         common_prefix, str)
 
@@ -145,9 +149,4 @@ no_transpose(
 
 #define TEST_ERR_OUTPUT(str) fprintf(stderr, "%s[TEST-ERROR] %s: %s%s\n", \
         RED, common_prefix, str, RESET)
-
-
-#ifdef __CPLUSPLUS
-}
-#endif
 

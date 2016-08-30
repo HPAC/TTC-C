@@ -17,11 +17,6 @@ target_link_libraries(avx512-test ttc_c)
 add_executable(knc-test knc-test.c test-util.c)
 target_link_libraries(knc-test ttc_c)
 
-
-# Add customized make clean targets
-set(TTC_GEN "ttc_transpositions")
-set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "$(TTC_GEN)")
-
 # Build CUDA tests if CUDA is found
 find_package(CUDA)
 if (CUDA_FOUND)

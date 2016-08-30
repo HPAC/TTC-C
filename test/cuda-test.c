@@ -90,7 +90,7 @@ main() {
         ++error_num;
     }
     else {
-        TEST_SUCC_OUTPUT("TYPE_CZ + CUDA + DEF succeed.");
+        TEST_SUCC_OUTPUT("TYPE_Z + CUDA + DEF succeed.");
     }
 
     TEST_INFO_OUTPUT("TYPE_CZ + CUDA + DEF.");

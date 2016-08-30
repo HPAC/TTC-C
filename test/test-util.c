@@ -182,8 +182,8 @@ datatype_test(
 
 int32_t
 arch_compiler_test(
-        ttc_arch_e arch,
-        ttc_compiler_e compiler
+        ttc_arch_e      arch,
+        ttc_compiler_e  compiler
         ) {
     ttc_handler_s *handler = ttc_init();
     if (NULL == handler) {
@@ -248,10 +248,10 @@ arch_compiler_test(
 
 int32_t
 cuda_test(
-        ttc_datatype_e type,
-        ttc_thread_blk_e blk,
-        int32_t *lda,
-        int32_t *ldb
+        ttc_datatype_e      type,
+        ttc_thread_blk_e    blk,
+        int32_t             *lda,
+        int32_t             *ldb
         ) {
     ttc_handler_s *handler = ttc_init();
     if (NULL == handler) {
@@ -364,9 +364,9 @@ cuda_test(
 
 int32_t
 no_beta_test(
-        ttc_datatype_e type,
-        ttc_arch_e arch,
-        ttc_compiler_e compiler
+        ttc_datatype_e  type,
+        ttc_arch_e      arch,
+        ttc_compiler_e  compiler
         ) {
     ttc_handler_s *handler = ttc_init();
     if (NULL == handler) {
