@@ -324,12 +324,6 @@ union ttc_float {
  */
 struct ttc_param {
     // Non-signature members
-    ttc_datatype_e  datatype;
-    /**< `--dataType=[s,d,c,z,sd,ds,cz,zc]`: Select the datatype. Default:
-     * Single-precision float. It is a ttc_datatype_e object.
-     * @sa enum ttc_datatype, typedef enum ttc_datatype ttc_datatype_e
-     */
-
     ttc_float_u     alpha;
     /**<
      * The alpha in the general form formula, the format should be set
@@ -361,6 +355,12 @@ struct ttc_param {
      */
 
     // Signature members
+    ttc_datatype_e  datatype;
+    /**< `--dataType=[s,d,c,z,sd,ds,cz,zc]`: Select the datatype. Default:
+     * Single-precision float. It is a ttc_datatype_e object.
+     * @sa enum ttc_datatype, typedef enum ttc_datatype ttc_datatype_e
+     */
+
     uint32_t        *perm;
     /**<
      * The permutations, e.g. for 3-dim tensor, the target transpose could be

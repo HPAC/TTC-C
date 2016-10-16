@@ -138,6 +138,8 @@ ttc_plan(
             // Compare signature members
             // Compare dim
             if (param->dim == dim
+                // Compare datatype
+                && param->datatype == cmp->datatype
                 // Compare perm
                 && uint32cmp(param->perm, cmp->perm, dim)
                 // Compare size
