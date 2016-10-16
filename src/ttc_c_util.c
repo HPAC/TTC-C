@@ -1068,12 +1068,21 @@ ttc_gen_code_avx(
             "const int *lda, const int *ldb) {\n"
             "    %s<", target_prefix);
 
-    int32_t dim_idx;
-    for (dim_idx = 0; dim_idx < param->dim; ++dim_idx) {
-        fprintf(target_file, "%d", param->size[dim_idx]);
-        if (param->dim - 1 != dim_idx)
-            fprintf(target_file, ", ");
+    uint32_t under_score_count = 0;
+    const char *parse_ptr = target_prefix;
+    while (2 != under_score_count) {
+        if ('_' == *parse_ptr)
+            ++under_score_count;
+        ++parse_ptr;
     }
+    while ('_' != *parse_ptr) {
+        if ('x' == *parse_ptr)
+            fprintf(target_file, ", ");
+        else
+            fprintf(target_file, "%c", *parse_ptr);
+        ++parse_ptr;
+    }
+
     fprintf(target_file, ">((const TENSOR_IN_T *)input,\n"
             "        (TENSOR_OUT_T *)result,\n"
             "        *(ALPHA_T *)alpha, BETA_PARAM\n"
