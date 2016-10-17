@@ -38,7 +38,6 @@ ttc_init(
     handler->options.blockings_len  = 0;
     handler->options.affinity       = NULL;
     handler->options.compiler       = TTC_CMP_DEFAULT;
-    handler->options.datatype       = TTC_TYPE_DEFAULT;
     handler->options.arch           = TTC_ARCH_DEFAULT;
     handler->options.tb             = TTC_TB_DEFAULT;
     handler->options.status         = 0;
@@ -84,6 +83,7 @@ ttc_param_s
 ttc_default_param(
         ) {
     ttc_param_s def_obj = {
+        .datatype   = TTC_TYPE_DEFAULT,
         .alpha.s    = 1.0,
         .beta.s     = 0.0,
         .lda        = NULL,
@@ -181,13 +181,6 @@ ttc_set_opt(
                 "ttc_handler_s::options::compiler.");
 
         handler->options.compiler = *(ttc_compiler_e *)value;
-        break;
-
-    case TTC_OPT_DATATYPE:
-        DEBUG_INFO_OUTPUT("Setting option: "
-                "ttc_handler_s::options::datatype.");
-
-        handler->options.datatype = *(ttc_datatype_e *)value;
         break;
 
     case TTC_OPT_ARCH:

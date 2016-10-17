@@ -29,14 +29,11 @@ reuse_test(
     }
 
     // Create transpose parameter
-    ttc_param_s param = {
-        .alpha.s = ALPHA,
-        .beta.s = BETA,
-        .lda = NULL,
-        .ldb = NULL,
-        .loop_perm = NULL,
-        .dim = TENSOR_DIM
-    };
+    ttc_param_s param = ttc_default_param();
+    param.alpha.s = ALPHA;
+    param.beta.s = BETA;
+    param.dim = TENSOR_DIM;
+
     uint32_t perm[TENSOR_DIM] = { PERM_0, PERM_1, PERM_2 };
     uint32_t size[TENSOR_DIM]
         = { TENSOR_SIZE_0, TENSOR_SIZE_1, TENSOR_SIZE_2 };
@@ -88,17 +85,10 @@ datatype_test(
         return -1;
     }
 
-    if (0 != ttc_set_opt(handler, TTC_OPT_DATATYPE, &type, 0)) {
-        TEST_ERR_OUTPUT("Cannot set datatype.");
-        return -1;
-    }
+    ttc_param_s param = ttc_default_param();
+    param.datatype = type;
+    param.dim = TENSOR_DIM;
 
-    ttc_param_s param = {
-        .lda = NULL,
-        .ldb = NULL,
-        .loop_perm = NULL,
-        .dim = TENSOR_DIM
-    };
     uint32_t perm[TENSOR_DIM] = { PERM_0, PERM_1, PERM_2 };
     uint32_t size[TENSOR_DIM]
         = { TENSOR_SIZE_0, TENSOR_SIZE_1, TENSOR_SIZE_2 };
@@ -201,18 +191,10 @@ arch_compiler_test(
         return -1;
     }
 
-    ttc_datatype_e type = TTC_TYPE_ZC;
-    if (0 != ttc_set_opt(handler, TTC_OPT_DATATYPE, &type, 0)) {
-        TEST_ERR_OUTPUT("Cannot set type.");
-        return -1;
-    }
+    ttc_param_s param = ttc_default_param();
+    param.datatype = TTC_TYPE_ZC;
+    param.dim = TENSOR_DIM;
 
-    ttc_param_s param = {
-        .lda = NULL,
-        .ldb = NULL,
-        .loop_perm = NULL,
-        .dim = TENSOR_DIM
-    };
     uint32_t perm[TENSOR_DIM] = { PERM_0, PERM_1, PERM_2 };
     uint32_t size[TENSOR_DIM]
         = { TENSOR_SIZE_0, TENSOR_SIZE_1, TENSOR_SIZE_2 };
@@ -265,22 +247,15 @@ cuda_test(
         return -1;
     }
 
-    if (0 != ttc_set_opt(handler, TTC_OPT_DATATYPE, &type, 0)) {
-        TEST_ERR_OUTPUT("Cannot set type.");
-        return -1;
-    }
-
     if (0 != ttc_set_opt(handler, TTC_OPT_TB, &blk, 0)) {
         TEST_ERR_OUTPUT("Cannot set thread block.");
         return -1;
     }
 
-    ttc_param_s param = {
-        .lda = lda,
-        .ldb = ldb,
-        .loop_perm = NULL,
-        .dim = TENSOR_DIM
-    };
+    ttc_param_s param = ttc_default_param();
+    param.datatype = type;
+    param.dim = TENSOR_DIM;
+
     uint32_t perm[TENSOR_DIM] = { PERM_0, PERM_1, PERM_2 };
     uint32_t size[TENSOR_DIM]
         = { TENSOR_SIZE_0, TENSOR_SIZE_1, TENSOR_SIZE_2 };
@@ -384,15 +359,10 @@ no_beta_test(
         return -1;
     }
 
-    if (0 != ttc_set_opt(handler, TTC_OPT_DATATYPE, &type, 0)) {
-        TEST_ERR_OUTPUT("Cannot set type.");
-        return -1;
-    }
+    ttc_param_s param = ttc_default_param();
+    param.datatype = type;
+    param.dim = TENSOR_DIM;
 
-    ttc_param_s param = {
-        .loop_perm = NULL,
-        .dim = TENSOR_DIM
-    };
     uint32_t perm[TENSOR_DIM] = { PERM_0, PERM_1, PERM_2 };
     uint32_t size[TENSOR_DIM]
         = { TENSOR_SIZE_0, TENSOR_SIZE_1, TENSOR_SIZE_2 };
@@ -456,10 +426,11 @@ no_transpose(
     }
 
     TEST_INFO_OUTPUT("Set param.");
-    ttc_param_s param = {
-        .loop_perm = NULL,
-        .dim = 4
-    };
+    ttc_param_s param = ttc_default_param();
+    param.alpha.s = ALPHA;
+    param.beta.s = BETA;
+    param.dim = TENSOR_DIM;
+
     uint32_t perm[4] = { 0, 1, 2, 3 };
     uint32_t size[4] = { 128, 64, 32, 16 };
     param.perm = perm;

@@ -84,13 +84,13 @@ extern "C" {
 #define TTC_FUNC_SYMBOL         "transpose"
 
 
-#define TTC_GXX_CMPL            "g++ -c -O2 -w -fPIC "
+#define TTC_GXX_CMPL            "g++ -c -O3 -w -fPIC "
 #define TTC_GXX_LINK            "g++ -shared "
 
-#define TTC_ICPC_CMPL           "icpc -c -O2 -w -fPIC "
+#define TTC_ICPC_CMPL           "icpc -c -O3 -w -fPIC "
 #define TTC_ICPC_LINK           "icpc -shared "
 
-#define TTC_NVCC_CMPL           "nvcc -c -O2 -rdc=true "
+#define TTC_NVCC_CMPL           "nvcc -c -O3 -rdc=true "
 #define TTC_NVCC_LINK           "nvcc -rdc=true -shared "
 
 #define TTC_ARCH_AVX_GXX_CMPL   TTC_GXX_CMPL "-fopenmp -march=native "

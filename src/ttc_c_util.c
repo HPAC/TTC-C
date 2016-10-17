@@ -138,6 +138,8 @@ ttc_plan(
             // Compare signature members
             // Compare dim
             if (param->dim == dim
+                // Compare datatype
+                && param->datatype == cmp->datatype
                 // Compare perm
                 && uint32cmp(param->perm, cmp->perm, dim)
                 // Compare size
@@ -232,11 +234,11 @@ ttc_create_plan(
     new_plan->next              = NULL;
 
     // Initialize member: param.alpha
-    if (TTC_TYPE_DEFAULT == options->datatype
-        || TTC_TYPE_S == options->datatype
-        || TTC_TYPE_C == options->datatype
-        || TTC_TYPE_SD == options->datatype
-        || TTC_TYPE_CZ == options->datatype
+    if (TTC_TYPE_DEFAULT == param->datatype
+        || TTC_TYPE_S == param->datatype
+        || TTC_TYPE_C == param->datatype
+        || TTC_TYPE_SD == param->datatype
+        || TTC_TYPE_CZ == param->datatype
        ) {
         DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::alpha with single "
                 "precision.");
@@ -249,11 +251,11 @@ ttc_create_plan(
     }
 
     // Initialize member: param.beta
-    if (TTC_TYPE_DEFAULT == options->datatype
-        || TTC_TYPE_S == options->datatype
-        || TTC_TYPE_C == options->datatype
-        || TTC_TYPE_DS == options->datatype
-        || TTC_TYPE_ZC == options->datatype
+    if (TTC_TYPE_DEFAULT == param->datatype
+        || TTC_TYPE_S == param->datatype
+        || TTC_TYPE_C == param->datatype
+        || TTC_TYPE_DS == param->datatype
+        || TTC_TYPE_ZC == param->datatype
        ) {
         DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::beta"
                 "with single precision.");
@@ -636,9 +638,6 @@ ttc_gen_arg(
         DEBUG_ERR_OUTPUT("IBM compiler is not supported.");
         ttc_release_arg(argv);
         return NULL;
-        TTC_SET_ARG_ENUM(TTC_ARG_COMPILER, TTC_ARG_CMP_IBM);
-        ++arg_idx;
-        break;
     case TTC_CMP_NVCC:
         TTC_SET_ARG_ENUM(TTC_ARG_COMPILER, TTC_ARG_CMP_NVCC);
         ++arg_idx;
@@ -648,7 +647,7 @@ ttc_gen_arg(
         break;
     }
 
-    switch (options->datatype) {
+    switch (param->datatype) {
     case TTC_TYPE_DEFAULT:
         DEBUG_INFO_OUTPUT("Using default datatype.");
         break;
@@ -688,6 +687,7 @@ ttc_gen_arg(
         DEBUG_WARN_OUTPUT("Unknown datatype, using default.");
         break;
     }
+
 
     switch (options->arch) {
     case TTC_ARCH_DEFAULT:
@@ -769,11 +769,11 @@ ttc_gen_arg(
     TTC_SET_ARG_ARRAY(param->ldb, param->dim, TTC_ARG_LDB);
 
     // Set beta
-    if (TTC_TYPE_DEFAULT == options->datatype
-        || TTC_TYPE_S == options->datatype
-        || TTC_TYPE_C == options->datatype
-        || TTC_TYPE_DS == options->datatype
-        || TTC_TYPE_ZC == options->datatype
+    if (TTC_TYPE_DEFAULT == param->datatype
+        || TTC_TYPE_S == param->datatype
+        || TTC_TYPE_C == param->datatype
+        || TTC_TYPE_DS == param->datatype
+        || TTC_TYPE_ZC == param->datatype
         ) {
         TTC_SET_ARG_SINGLE(param->beta.s, TTC_ARG_BETA, "%s%f");
     }
@@ -823,7 +823,7 @@ ttc_count_arg(
         ++arg_count;
     if (TTC_CMP_DEFAULT != options->compiler)
         ++arg_count;
-    if (TTC_TYPE_DEFAULT != options->datatype)
+    if (TTC_TYPE_DEFAULT != param->datatype)
         ++arg_count;
     if (TTC_ARCH_DEFAULT != options->arch)
         ++arg_count;
@@ -842,11 +842,11 @@ ttc_count_arg(
     // Param
     // alpha will be set to 1.0, so it will not be accounted.
     DEBUG_INFO_OUTPUT("Counting ttc_plan_s::param.");
-    if (TTC_TYPE_DEFAULT == options->datatype
-        || TTC_TYPE_S == options->datatype
-        || TTC_TYPE_C == options->datatype
-        || TTC_TYPE_DS == options->datatype
-        || TTC_TYPE_ZC == options->datatype
+    if (TTC_TYPE_DEFAULT == param->datatype
+        || TTC_TYPE_S == param->datatype
+        || TTC_TYPE_C == param->datatype
+        || TTC_TYPE_DS == param->datatype
+        || TTC_TYPE_ZC == param->datatype
         ) {
         if (0.0 != param->beta.s)
             ++arg_count;
@@ -1045,8 +1045,8 @@ ttc_gen_code_avx(
     DEBUG_INFO_OUTPUT("Generating code.");
     // include MACRO
     fprintf(target_file, "#include \"%s.h\"\n", target_prefix);
-    if (TTC_TYPE_C == options->datatype || TTC_TYPE_Z == options->datatype
-        || TTC_TYPE_CZ == options->datatype || TTC_TYPE_ZC == options->datatype)
+    if (TTC_TYPE_C == param->datatype || TTC_TYPE_Z == param->datatype
+        || TTC_TYPE_CZ == param->datatype || TTC_TYPE_ZC == param->datatype)
         fprintf(target_file, "#include <complex.h>\n");
 
     // Function declaration
@@ -1068,12 +1068,21 @@ ttc_gen_code_avx(
             "const int *lda, const int *ldb) {\n"
             "    %s<", target_prefix);
 
-    int32_t dim_idx;
-    for (dim_idx = 0; dim_idx < param->dim; ++dim_idx) {
-        fprintf(target_file, "%d", param->size[dim_idx]);
-        if (param->dim - 1 != dim_idx)
-            fprintf(target_file, ", ");
+    uint32_t under_score_count = 0;
+    const char *parse_ptr = target_prefix;
+    while (2 != under_score_count) {
+        if ('_' == *parse_ptr)
+            ++under_score_count;
+        ++parse_ptr;
     }
+    while ('_' != *parse_ptr) {
+        if ('x' == *parse_ptr)
+            fprintf(target_file, ", ");
+        else
+            fprintf(target_file, "%c", *parse_ptr);
+        ++parse_ptr;
+    }
+
     fprintf(target_file, ">((const TENSOR_IN_T *)input,\n"
             "        (TENSOR_OUT_T *)result,\n"
             "        *(ALPHA_T *)alpha, BETA_PARAM\n"
@@ -1123,8 +1132,8 @@ ttc_gen_code_cuda(
     // include MACRO
     // fprintf(target_file, "#include \"%s.h\"\n\n", target_prefix);
     fprintf(target_file, "#include <cuda_runtime.h>\n");
-    if (TTC_TYPE_C == options->datatype || TTC_TYPE_Z == options->datatype
-        || TTC_TYPE_CZ == options->datatype || TTC_TYPE_ZC == options->datatype)
+    if (TTC_TYPE_C == param->datatype || TTC_TYPE_Z == param->datatype
+        || TTC_TYPE_CZ == param->datatype || TTC_TYPE_ZC == param->datatype)
         fprintf(target_file, "#include <cuComplex.h>\n");
 
     // MACRO definition
@@ -1143,7 +1152,7 @@ ttc_gen_code_cuda(
 
     // The transpose function's name is inconsistent with the file name.
     strcpy(gen_buf, target_prefix);
-    if (TTC_TYPE_ZC == options->datatype)
+    if (TTC_TYPE_ZC == param->datatype)
         gen_buf[1] = 'c';
 
     // Function declaration
@@ -1327,46 +1336,46 @@ ttc_gen_type_macro(
         ? "cuFloatComplex" : "float complex";
     const char *dcplx_type = TTC_ARCH_CUDA == options->arch
         ? "cuDoubleComplex" : "double complex";
-    if (TTC_TYPE_DEFAULT == options->datatype
-        || TTC_TYPE_S == options->datatype) {
+    if (TTC_TYPE_DEFAULT == param->datatype
+        || TTC_TYPE_S == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T float\n"
                 "#define TENSOR_OUT_T float\n"
                 "#define ALPHA_T float\n");
     }
-    else if (TTC_TYPE_D == options->datatype) {
+    else if (TTC_TYPE_D == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T double\n"
                 "#define TENSOR_OUT_T double\n"
                 "#define ALPHA_T double\n");
     }
-    else if (TTC_TYPE_C == options->datatype) {
+    else if (TTC_TYPE_C == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T %s\n"
                 "#define TENSOR_OUT_T %s\n"
                 "#define ALPHA_T float\n",
                 fcplx_type, fcplx_type);
     }
-    else if (TTC_TYPE_Z == options->datatype) {
+    else if (TTC_TYPE_Z == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T %s\n"
                 "#define TENSOR_OUT_T %s\n"
                 "#define ALPHA_T double\n",
                 dcplx_type, dcplx_type);
     }
-    else if (TTC_TYPE_SD == options->datatype) {
+    else if (TTC_TYPE_SD == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T float\n"
                 "#define TENSOR_OUT_T double\n"
                 "#define ALPHA_T float\n");
     }
-    else if (TTC_TYPE_DS == options->datatype) {
+    else if (TTC_TYPE_DS == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T double\n"
                 "#define TENSOR_OUT_T float\n"
                 "#define ALPHA_T double\n");
     }
-    else if (TTC_TYPE_CZ == options->datatype) {
+    else if (TTC_TYPE_CZ == param->datatype) {
         fprintf(target_file, "#define TENSOR_IN_T %s\n"
                 "#define TENSOR_OUT_T %s\n"
                 "#define ALPHA_T float\n",
                 fcplx_type, dcplx_type);
     }
-    else if (TTC_TYPE_ZC == options->datatype)
+    else if (TTC_TYPE_ZC == param->datatype)
         fprintf(target_file, "#define TENSOR_IN_T %s\n"
                 "#define TENSOR_OUT_T %s\n"
                 "#define ALPHA_T double\n",
@@ -1374,9 +1383,9 @@ ttc_gen_type_macro(
     else
         return -1;
 
-    if (TTC_TYPE_DEFAULT == options->datatype
-        || TTC_TYPE_S == options->datatype || TTC_TYPE_C == options->datatype
-        || TTC_TYPE_DS == options->datatype || TTC_TYPE_ZC == options->datatype
+    if (TTC_TYPE_DEFAULT == param->datatype
+        || TTC_TYPE_S == param->datatype || TTC_TYPE_C == param->datatype
+        || TTC_TYPE_DS == param->datatype || TTC_TYPE_ZC == param->datatype
        ) {
         fprintf(target_file, "#define BETA_T float\n");
         if (0.0 != param->beta.s)

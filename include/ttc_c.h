@@ -244,14 +244,6 @@ enum ttc_opt_type {
      * @sa enum ttc_compiler, typedef enum ttc_compiler ttc_compiler_e
      */
 
-    TTC_OPT_DATATYPE,
-    /**<
-     * `--dataType=[s,d,c,z,sd,ds,cz,zc]`: Select the datatype. Default:
-     * Single-precision float. The `value` must be a pointer pointing to a
-     * ttc_datatype_e object, the `length` will be omitted.
-     * @sa enum ttc_datatype, typedef enum ttc_datatype ttc_datatype_e
-     */
-
     TTC_OPT_ARCH,
     /**<
      * `--architecture=[avx,power,avx512,knc,cuda]`: Choose architecture.
@@ -332,7 +324,7 @@ union ttc_float {
  */
 struct ttc_param {
     // Non-signature members
-    ttc_float_u alpha;
+    ttc_float_u     alpha;
     /**<
      * The alpha in the general form formula, the format should be set
      * according to the data type setting.
@@ -340,7 +332,7 @@ struct ttc_param {
      * @sa union ttc_float
      */
 
-    ttc_float_u beta;
+    ttc_float_u     beta;
     /**<
      * The beta in the general form formula, the format should be set
      * according to the data type setting. Please set it to 0 if you want
@@ -348,14 +340,14 @@ struct ttc_param {
      * @sa union ttc_float
      */
 
-    int32_t    *lda;
+    int32_t         *lda;
     /**<
      * Leading dimension of each dimension of the input tensor. It must be
      * either an empty pointer, or `uint32_t` type array whose length is
      * `dim`.
      */
 
-    int32_t    *ldb;
+    int32_t         *ldb;
     /**<
      * Leading dimension of each dimension of the output tensor. It must be
      * either an empty pointer, or `uint32_t` type array whose length is
@@ -363,26 +355,32 @@ struct ttc_param {
      */
 
     // Signature members
-    uint32_t    *perm;
+    ttc_datatype_e  datatype;
+    /**< `--dataType=[s,d,c,z,sd,ds,cz,zc]`: Select the datatype. Default:
+     * Single-precision float. It is a ttc_datatype_e object.
+     * @sa enum ttc_datatype, typedef enum ttc_datatype ttc_datatype_e
+     */
+
+    uint32_t        *perm;
     /**<
      * The permutations, e.g. for 3-dim tensor, the target transpose could be
      * [1, 0, 2]. It must be a `uint32_t` type array whose length is `dim`.
      */
 
-    uint32_t    *size;
+    uint32_t        *size;
     /**<
      * The size in each dimension of the origin tensor, e.g. for 3-dim tensor,
      * the origin size before transposition could be [100, 200, 300]. It must
      * be a `uint32_t` type array whose length is `dim`.
      */
 
-    uint32_t    *loop_perm;
+    uint32_t        *loop_perm;
     /**<
      * Only generating the specified loop order, it could be either an empty
      * pointer, or a `uint32_t` array whose length is `dim`.
      */
 
-    uint32_t    dim;
+    uint32_t        dim;
     /**<
      * The dimension of the tensor to be transposed.
      */
@@ -490,12 +488,6 @@ struct ttc_opt {
     /**< `--compiler=[g++,icpc,ibm,nvcc]`: Choose compiler. Default: icpc.
      * It is a ttc_compiler_e object.
      * @sa enum ttc_compiler, typedef enum ttc_compiler ttc_compiler_e
-     */
-
-    ttc_datatype_e      datatype;
-    /**< `--dataType=[s,d,c,z,sd,ds,cz,zc]`: Select the datatype. Default:
-     * Single-precision float. It is a ttc_datatype_e object.
-     * @sa enum ttc_datatype, typedef enum ttc_datatype ttc_datatype_e
      */
 
     ttc_arch_e          arch;
