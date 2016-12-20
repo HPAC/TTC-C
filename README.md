@@ -42,11 +42,12 @@ Then, execute `make` to build the library, and `make doc` to build the document.
 Here is a short (incomplete) example which illustrates the usage of this API on
 the example of perm=2,1,0 for tensors of size 100x200x300:
 
+    #include <string.h>
     // include header
     #include <ttc_c.h>
 
-    // Create handler
-    ttc_handler_s *handler = ttc_init();
+    // Create handle
+    ttc_handler_s *ttc_handle = ttc_init();
 
     // Create transpose parameter
     ttc_param_s param = { .alpha.s = 1.0, .beta.s = 1.0, .lda = NULL, .ldb = NULL, .perm = NULL, .size = NULL, .loop_perm = NULL, .dim = 4};
@@ -68,6 +69,6 @@ the example of perm=2,1,0 for tensors of size 100x200x300:
     void *B = (void *)malloc(sizeof(float) * 100*200*300);
 
     // Execute transpose
-    ttc_transpose(handler, &param, A, B);
+    ttc_transpose(ttc_handle, &param, A, B);
 
 For further examples please have a look at the provided [tests](https://github.com/HPAC/TTC-C/blob/master/test/jit-test.c).
