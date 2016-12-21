@@ -233,6 +233,9 @@ ttc_create_plan(
     new_plan->fn_cuda           = NULL;
     new_plan->next              = NULL;
 
+    DEBUG_INFO_OUTPUT("Setting ttc_plan_s::param::datatype.");
+    new_plan->param.datatype = param->datatype;
+
     // Initialize member: param.alpha
     if (TTC_TYPE_DEFAULT == param->datatype
         || TTC_TYPE_S == param->datatype
