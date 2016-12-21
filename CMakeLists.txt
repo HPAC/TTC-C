@@ -5,7 +5,7 @@
 #      $ cmake <PATH_TO_TTC_TCC_C>
 #
 # ----------------------------------------------------------------------------
-cmake_minimum_required (VERSION 3.4)
+cmake_minimum_required (VERSION 2.8)
 project (TTC_C)
 
 
