@@ -26,7 +26,7 @@ set(BUILD_TYPE "RELEASE" CACHE STRING "Build type, either DEBUG or RELEASE.")
 # ----------------------------------------------------------------------------
 set(TTC_CC_FLAGS "-Wall -std=c99")
 set(TTC_DEBUG_FLAG "-g -D TENSOR_DEBUG")
-set(TTC_RELEASE_FLAG "-O2")
+set(TTC_RELEASE_FLAG "-O3")
 
 if (BUILD_TYPE STREQUAL "DEBUG")
     # Use debug configurations.

@@ -1075,9 +1075,12 @@ ttc_gen_code_avx(
             ++under_score_count;
         ++parse_ptr;
     }
-    while ('_' != *parse_ptr) {
+
+    while ('\0' != *parse_ptr) {
         if ('x' == *parse_ptr)
             fprintf(target_file, ", ");
+        else if ('_' == *parse_ptr)
+            break;
         else
             fprintf(target_file, "%c", *parse_ptr);
         ++parse_ptr;
